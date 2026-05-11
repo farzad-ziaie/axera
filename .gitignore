@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+.env
+*.pth
+
+# Rust
+target/
+Cargo.lock
+
+# Maturin
+*.pyd
+axera/_core*.so
+axera/_core*.pyd
+axera/_core.cpython*.so
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.mutmut-cache
+
+# Docs
+site/
+docs/api/_autogen/
+
+# ML / data
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.pkl
+*.onnx
+data/
+outputs/
+wandb/
+mlruns/
+*.csv.bak
+
+# Notebooks
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Docker
+.docker/
+
+# Secrets
+.env
+secrets.yaml
+*.pem
+*.key
