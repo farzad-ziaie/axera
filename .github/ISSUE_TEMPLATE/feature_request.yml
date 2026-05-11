@@ -1,0 +1,41 @@
+name: 🚀 Feature Request
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem are you trying to solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the feature you'd like.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any workarounds you've tried?
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - Activations (LIP / GMDH)
+        - Optimizers (gradient-based)
+        - Optimizers (swarm-based)
+        - Medical metrics
+        - CLI
+        - Documentation
+        - Performance / Rust extension
+        - Other

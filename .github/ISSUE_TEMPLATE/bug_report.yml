@@ -1,0 +1,74 @@
+name: 🐛 Bug Report
+description: Report a reproducible bug in Axera
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug!
+        Please fill in as much detail as possible.
+
+  - type: input
+    id: axera-version
+    attributes:
+      label: Axera version
+      placeholder: "e.g. 0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      placeholder: "e.g. 3.12.3"
+    validations:
+      required: true
+
+  - type: input
+    id: torch-version
+    attributes:
+      label: PyTorch version (if applicable)
+      placeholder: "e.g. 2.4.0 or N/A"
+
+  - type: dropdown
+    id: backend
+    attributes:
+      label: Backend
+      options: ["torch (GPU)", "torch (CPU)", "numpy"]
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: What happened? What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproducible example
+      description: Please paste a minimal code snippet that reproduces the bug.
+      render: python
+    validations:
+      required: true
+
+  - type: textarea
+    id: traceback
+    attributes:
+      label: Full traceback
+      render: text
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched the existing issues.
+          required: true
+        - label: I am running the latest release of Axera.
+          required: false
