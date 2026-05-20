@@ -1,0 +1,21 @@
+[package]
+name        = "axera_core"
+version     = "0.1.0"
+edition     = "2021"
+description = "High-performance Rust extension for Axera: combinatorial indexing and MOPSO grid operations"
+authors     = ["Farzad Ziaie Nezhad <farzadziaien@gmail.com>"]
+license     = "AGPL-3.0-or-later"
+
+[lib]
+name    = "axera_core"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3    = { version = "0.21", features = ["extension-module"] }
+ndarray = "0.15"
+rayon   = "1.10"
+
+[profile.release]
+lto      = true
+opt-level = 3
+codegen-units = 1
