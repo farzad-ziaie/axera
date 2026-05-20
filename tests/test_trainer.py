@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-
 from axera.config import TrainerConfig
-from axera.layers import Dense, GMDH, InputLayer, RegressionHead, ClassificationHead
+from axera.layers import GMDH, ClassificationHead, Dense, InputLayer, RegressionHead
 from axera.models import Sequential
 from axera.trainer import Trainer
 
@@ -84,7 +83,7 @@ class TestTrainer:
 def test_trainer_mopso_optimizer(regression_model, small_regression_data):
     X, y = small_regression_data
     from axera.losses import BlandAltmanLoss
-    
+
     loss = BlandAltmanLoss(
         predict_fn=regression_model.predict_from_weights,
         X_train=X, y_train=y,

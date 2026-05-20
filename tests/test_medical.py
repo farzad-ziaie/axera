@@ -4,14 +4,13 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-
-from axera.medical.icc import icc
-from axera.medical.agreement import bland_altman, concordance_correlation, cohen_kappa
-from axera.medical.discrimination import roc_auc, operating_point, reclassification
+from axera.medical.agreement import bland_altman, concordance_correlation
 from axera.medical.calibration import (
-    brier_score, calibration_error, hosmer_lemeshow, calibration_regression
+    brier_score,
+    hosmer_lemeshow,
 )
-
+from axera.medical.discrimination import operating_point, reclassification, roc_auc
+from axera.medical.icc import icc
 
 # ── ICC regression tests ──────────────────────────────────────────────────────
 

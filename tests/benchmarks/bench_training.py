@@ -7,9 +7,8 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-
 from axera.config import TrainerConfig
-from axera.layers import Dense, GMDH, InputLayer, RegressionHead
+from axera.layers import GMDH, Dense, InputLayer, RegressionHead
 from axera.models import Sequential
 from axera.trainer import Trainer
 

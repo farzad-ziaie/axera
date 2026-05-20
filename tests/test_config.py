@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 import json
-import os
 
 import pytest
-
 from axera.config import (
-    AdamConfig, GMDHConfig, LIPConfig, MOPSOConfig, ModelConfig, TrainerConfig,
+    LIPConfig,
+    ModelConfig,
+    MOPSOConfig,
+    TrainerConfig,
 )
 
 

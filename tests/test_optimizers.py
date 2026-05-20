@@ -5,7 +5,6 @@ from __future__ import annotations
 import numpy as np
 import pytest
 import torch
-
 from axera.optimizers.gradient import Lion, NumpyAdam, get_optimizer
 
 
@@ -86,7 +85,7 @@ def test_mopso_fit_runs(small_regression_data):
     X, y = small_regression_data
     from axera.losses import BlandAltmanLoss
     from axera.optimizers import MOPSO
-    
+
     loss = BlandAltmanLoss(
         predict_fn=lambda w, X: np.zeros(len(X)),
         X_train=X, y_train=y,

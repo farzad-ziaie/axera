@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-
-from axera.hooks import HookRegistry, VALID_HOOKS
+from axera.hooks import VALID_HOOKS, HookRegistry
 
 
 class TestHookRegistry:

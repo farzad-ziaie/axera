@@ -5,9 +5,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 import torch
-
 from axera.config import ModelConfig
-from axera.layers import Dense, GMDH, InputLayer, RegressionHead, ClassificationHead
+from axera.layers import GMDH, ClassificationHead, Dense, InputLayer, RegressionHead
 from axera.models import Sequential
 
 

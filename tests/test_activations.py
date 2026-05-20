@@ -4,10 +4,8 @@ from __future__ import annotations
 
 import pytest
 import torch
-import numpy as np
-
-from axera.activations import LIP, LIPTanh, LIPSigmoid, LIPReLU
-from axera.activations.standard import Tanh, Sigmoid, ReLU, LeakyReLU
+from axera.activations import LIP, LIPReLU, LIPSigmoid, LIPTanh
+from axera.activations.standard import LeakyReLU, ReLU, Sigmoid, Tanh
 
 
 class TestLIP:

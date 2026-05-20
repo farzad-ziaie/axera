@@ -1,6 +1,5 @@
-from axera.utils import impute_and_drop
 import numpy as np
-import pytest
+from axera.utils import impute_and_drop
 
 
 def test_impute_and_drop():

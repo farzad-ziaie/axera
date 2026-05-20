@@ -4,9 +4,7 @@ from __future__ import annotations
 
 import pytest
 import torch
-import numpy as np
-
-from axera.layers import Dense, GMDH, InputLayer, RegressionHead, ClassificationHead
+from axera.layers import GMDH, ClassificationHead, Dense, InputLayer, RegressionHead
 
 
 class TestDense:

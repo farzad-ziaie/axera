@@ -5,8 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 import torch
-
-from axera.losses import MSE, MAE, LogCosh, HuberLoss, BlandAltmanLoss
+from axera.losses import MAE, MSE, BlandAltmanLoss, HuberLoss, LogCosh
 
 
 class TestRegressionLosses:
