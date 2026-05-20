@@ -12,7 +12,7 @@ for the current weight vector.
 
 from __future__ import annotations
 
-from typing import Callable, Sequence
+from collections.abc import Callable, Sequence
 
 import numpy as np
 from numpy.typing import NDArray
@@ -20,7 +20,6 @@ from scipy.optimize import curve_fit
 from sklearn.metrics import r2_score
 
 from axera.medical.icc import icc
-
 
 # ── Protocol ──────────────────────────────────────────────────────────────────
 
@@ -99,7 +98,7 @@ class BlandAltmanLoss(MultiObjectiveLoss):
 
     def _angle(self, pred: NDArray) -> float:
         diff = pred - self._Y
-        mean_ = (pred + self._Y) / 2.0
+        # mean_ = (pred + self._Y) / 2.0
         try:
             def line(x: NDArray, a: float, b: float) -> NDArray:
                 return a * x + b

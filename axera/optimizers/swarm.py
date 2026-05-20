@@ -17,9 +17,7 @@ Improvements over the original axera implementation
 from __future__ import annotations
 
 import logging
-from concurrent.futures import ProcessPoolExecutor, as_completed
 from copy import deepcopy
-from typing import Optional
 
 import numpy as np
 from numpy.typing import NDArray
@@ -27,9 +25,9 @@ from numpy.typing import NDArray
 from axera.losses.multiobjective import MultiObjectiveLoss
 
 try:
-    from axera._core import pareto_fast, grid_find_index  # type: ignore[import]
+    from axera._core import grid_find_index, pareto_fast  # noqa: F401
 except ImportError:
-    from axera._core_fallback import pareto_fast, grid_find_index
+    from axera._core_fallback import pareto_fast
 
 logger = logging.getLogger(__name__)
 
@@ -161,7 +159,7 @@ class MOPSO:
         self.n_workers = n_workers
         self.rng = np.random.default_rng(seed)
 
-        self._loss:  Optional[MultiObjectiveLoss] = None
+        self._loss:  MultiObjectiveLoss | None = None
         self._n_dim: int = 0
         self.archive: list[_Particle] = []
         self.pop:     list[_Particle] = []
@@ -256,7 +254,7 @@ class MOPSO:
 
         # Remove dominated from archive
         nd_flags = pareto_fast([list(a.cost) for a in self.archive])
-        self.archive = [a for a, nd in zip(self.archive, nd_flags) if nd]
+        self.archive = [a for a, nd in zip(self.archive, nd_flags, strict=True) if nd]
 
         # Rebuild grid
         if self.archive:

@@ -8,8 +8,6 @@ GMDH    — Group Method of Data Handling layer; neurons receive all k-wise
 
 from __future__ import annotations
 
-from typing import Union
-
 import torch
 import torch.nn as nn
 
@@ -21,7 +19,7 @@ try:
 except ImportError:
     from axera._core_fallback import combinations_k
 
-_ActivationType = Union[LIP, LIPTanh, LIPSigmoid, LIPReLU, nn.Module]
+_ActivationType = LIP | LIPTanh | LIPSigmoid | LIPReLU | nn.Module
 
 
 # ── Dense ─────────────────────────────────────────────────────────────────────
@@ -59,7 +57,7 @@ class Dense(nn.Module):
         self,
         out_features: int,
         in_features: int,
-        activation: Union[str, nn.Module] = "lip",
+        activation: str | nn.Module = "lip",
         degree: int = 2,
         bias: bool = True,
     ) -> None:
@@ -124,7 +122,7 @@ class GMDH(nn.Module):
         self,
         in_features: int,
         k: int = 2,
-        activation: Union[str, nn.Module] = "lip",
+        activation: str | nn.Module = "lip",
         degree: int = 2,
         bias: bool = True,
     ) -> None:
@@ -156,7 +154,7 @@ class GMDH(nn.Module):
         Tensor  shape (batch, out_features)
         """
         outs = []
-        for neuron, idxs in zip(self.neurons, self.index_pairs):
+        for neuron, idxs in zip(self.neurons, self.index_pairs, strict=True):
             x_sub = x[:, idxs]          # (batch, k)
             outs.append(neuron(x_sub))  # (batch,)
         return torch.stack(outs, dim=-1)  # (batch, out_features)
@@ -171,7 +169,7 @@ class GMDH(nn.Module):
 # ── helpers ───────────────────────────────────────────────────────────────────
 
 def _build_activation(
-    activation: Union[str, nn.Module],
+    activation: str | nn.Module,
     in_features: int,
     degree: int,
     bias: bool,

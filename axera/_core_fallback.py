@@ -8,8 +8,8 @@ Performance will be lower, but all behaviour is identical.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from itertools import combinations
-from typing import Sequence
 
 
 def combinations_all(n: int) -> list[list[int]]:
@@ -42,15 +42,15 @@ def grid_find_index(
     """Flat integer grid index for a particle cost vector."""
     base = n_grid + 2
     idx = 0
-    for c, ubs in zip(cost, upper_bounds):
+    for c, ubs in zip(cost, upper_bounds, strict=True):
         idx = idx * base + grid_compare(c, ubs)
     return idx
 
 
 def pareto_dominates(a: Sequence[float], b: Sequence[float]) -> bool:
     """True if a weakly dominates b in all objectives and strictly in at least one."""
-    all_le = all(ai <= bi for ai, bi in zip(a, b))
-    any_lt = any(ai < bi for ai, bi in zip(a, b))
+    all_le = all(ai <= bi for ai, bi in zip(a, b, strict=True))
+    any_lt = any(ai < bi for ai, bi in zip(a, b, strict=True))
     return all_le and any_lt
 
 

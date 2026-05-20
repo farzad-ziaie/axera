@@ -7,18 +7,16 @@ Supports both PyTorch autograd (gradient optimizers) and derivative-free
 
 from __future__ import annotations
 
-import json
 import logging
 from pathlib import Path
-from typing import Any, Literal, Optional, Union
+from typing import Any, Literal
 
 import numpy as np
 import torch
 import torch.nn as nn
 from numpy.typing import NDArray
 
-from axera.activations.lip import LIP, LIPReLU, LIPSigmoid, LIPTanh
-from axera.config import ModelConfig, TrainerConfig
+from axera.config import ModelConfig
 from axera.hooks import HookRegistry
 from axera.layers.dense import GMDH, Dense
 from axera.layers.input import InputLayer
@@ -59,7 +57,7 @@ class Sequential(nn.Module):
         layers: list[nn.Module],
         task: Literal["regression", "binary", "multiclass"] = "regression",
         n_classes: int = 1,
-        hooks: Optional[HookRegistry] = None,
+        hooks: HookRegistry | None = None,
     ) -> None:
         super().__init__()
         if not layers:
@@ -68,15 +66,14 @@ class Sequential(nn.Module):
         self.task        = task
         self.n_classes   = n_classes
         self.hooks       = hooks or HookRegistry()
-        self._weights_n: Optional[NDArray] = None   # swarm optimizer state
+        self._weights_n: NDArray | None = None   # swarm optimizer state
         self._compiled   = False
 
     # ── Construction helpers ──────────────────────────────────────────────────
 
     @classmethod
-    def from_config(cls, cfg: ModelConfig) -> "Sequential":
+    def from_config(cls, cfg: ModelConfig) -> Sequential:
         """Build a Sequential model from a ``ModelConfig`` object."""
-        from axera.layers.dense import _build_activation
 
         layers: list[nn.Module] = [
             InputLayer(cfg.in_features, normalize=cfg.normalize_input)
@@ -126,7 +123,7 @@ class Sequential(nn.Module):
     # ── Inference API ─────────────────────────────────────────────────────────
 
     @torch.no_grad()
-    def predict(self, X: Union[NDArray, torch.Tensor], batch_size: int = 256) -> NDArray:
+    def predict(self, X: NDArray | torch.Tensor, batch_size: int = 256) -> NDArray:
         """
         Run prediction on X.
 
@@ -164,7 +161,7 @@ class Sequential(nn.Module):
 
         return self.hooks.run("post_predict", pred)
 
-    async def apredict(self, X: Union[NDArray, torch.Tensor], batch_size: int = 256) -> NDArray:
+    async def apredict(self, X: NDArray | torch.Tensor, batch_size: int = 256) -> NDArray:
         """Asyncio-native prediction (runs predict in executor)."""
         import asyncio
         loop = asyncio.get_event_loop()
@@ -224,7 +221,7 @@ class Sequential(nn.Module):
 
     # ── serialisation ─────────────────────────────────────────────────────────
 
-    def save(self, path: Union[str, Path]) -> None:
+    def save(self, path: str | Path) -> None:
         """Save model weights and architecture description."""
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -236,7 +233,7 @@ class Sequential(nn.Module):
         logger.info("Model saved to %s", path)
 
     @classmethod
-    def load(cls, path: Union[str, Path], layers: list[nn.Module], **kwargs: Any) -> "Sequential":
+    def load(cls, path: str | Path, layers: list[nn.Module], **kwargs: Any) -> Sequential:
         """Load model weights from path."""
         ckpt = torch.load(path, map_location="cpu", weights_only=True)
         model = cls(layers, task=ckpt["task"], n_classes=ckpt["n_classes"], **kwargs)

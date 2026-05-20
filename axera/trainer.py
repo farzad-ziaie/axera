@@ -14,9 +14,8 @@ Supports
 from __future__ import annotations
 
 import logging
-import time
 from pathlib import Path
-from typing import Any, Callable, Optional, Union
+from typing import Any
 
 import numpy as np
 import torch
@@ -26,7 +25,7 @@ from numpy.typing import NDArray
 from axera.config import TrainerConfig
 from axera.hooks import HookRegistry
 from axera.losses.multiobjective import BlandAltmanLoss, MultiObjectiveLoss
-from axera.losses.regression import LogCosh, MAE, MSE
+from axera.losses.regression import MAE, MSE, LogCosh
 from axera.models.sequential import Sequential
 from axera.optimizers.gradient import get_optimizer
 from axera.optimizers.swarm import MOPSO
@@ -97,9 +96,9 @@ class Trainer:
     def __init__(
         self,
         model: Sequential,
-        config: Optional[TrainerConfig] = None,
-        hooks: Optional[HookRegistry] = None,
-        loss_fn: Optional[Union[nn.Module, MultiObjectiveLoss]] = None,
+        config: TrainerConfig | None = None,
+        hooks: HookRegistry | None = None,
+        loss_fn: nn.Module | MultiObjectiveLoss | None = None,
     ) -> None:
         self.model  = model
         self.cfg    = config or TrainerConfig()
@@ -138,7 +137,7 @@ class Trainer:
             self._loss = loss_cls()
 
         # AMP scaler
-        self._scaler: Optional[torch.cuda.amp.GradScaler] = None
+        self._scaler: torch.cuda.amp.GradScaler | None = None
         if self.cfg.amp and str(self._device).startswith("cuda"):
             self._scaler = torch.cuda.amp.GradScaler()
 
@@ -151,7 +150,7 @@ class Trainer:
         self,
         X: NDArray,
         y: NDArray,
-        validation: Optional[tuple[NDArray, NDArray]] = None,
+        validation: tuple[NDArray, NDArray] | None = None,
     ) -> dict[str, list[float]]:
         """
         Train the model.
@@ -197,7 +196,7 @@ class Trainer:
         self,
         X: NDArray,
         y: NDArray,
-        validation: Optional[tuple[NDArray, NDArray]],
+        validation: tuple[NDArray, NDArray] | None,
     ) -> dict[str, list[float]]:
         opt = get_optimizer(
             self.cfg.optimizer, self.model.parameters(), lr=1e-3
@@ -279,7 +278,7 @@ class Trainer:
         self,
         X: NDArray,
         y: NDArray,
-        validation: Optional[tuple[NDArray, NDArray]],
+        validation: tuple[NDArray, NDArray] | None,
     ) -> dict[str, list[float]]:
         if not isinstance(self._loss, MultiObjectiveLoss):
             # Build default BlandAltmanLoss wrapping the model
@@ -309,7 +308,7 @@ class Trainer:
         self,
         X: NDArray,
         y: NDArray,
-        metrics: Union[str, list[str]] = "auto",
+        metrics: str | list[str] = "auto",
     ) -> dict[str, Any]:
         """
         Evaluate the trained model on a held-out set.
@@ -323,7 +322,7 @@ class Trainer:
         -------
         dict of metric name → value
         """
-        from axera.metrics import evaluate_regression, evaluate_classification
+        from axera.metrics import evaluate_classification, evaluate_regression
 
         preds = self.model.predict(X)
 

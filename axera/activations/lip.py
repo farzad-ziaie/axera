@@ -19,8 +19,6 @@ Ivakhnenko, A. G. (1971). Polynomial theory of complex systems.
 
 from __future__ import annotations
 
-from typing import Optional
-
 import torch
 import torch.nn as nn
 
@@ -82,7 +80,7 @@ class LIP(nn.Module):
         nn.init.kaiming_uniform_(w.unsqueeze(0), a=0.01)
         self.weight = nn.Parameter(w)          # always shape (n_terms,), never 0-dim
 
-        self.bias_param: Optional[nn.Parameter]
+        self.bias_param: nn.Parameter | None
         if bias:
             self.bias_param = nn.Parameter(torch.zeros(1))
         else:

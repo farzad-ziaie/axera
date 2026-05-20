@@ -20,10 +20,9 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
-from typing import Any, Literal, Optional, Union
+from typing import Any, Literal
 
-from pydantic import BaseModel, Field, field_validator, model_validator
-
+from pydantic import BaseModel, Field, field_validator
 
 # ── LIP activation ────────────────────────────────────────────────────────────
 
@@ -69,12 +68,13 @@ class ModelConfig(BaseModel):
     normalize_input: Literal["none", "standard", "minmax"] = "standard"
     layers: list[dict[str, Any]] = Field(
         default_factory=list,
-        description="Layer specs: [{'type': 'GMDH', 'k': 2, ...}, {'type': 'Dense', 'units': 8, ...}]",
+        description="Layer specs: [{'type': 'GMDH', 'k': 2, ...}, " \
+        "{'type': 'Dense', 'units': 8, ...}]",
     )
 
     @field_validator("n_classes")
     @classmethod
-    def _validate_n_classes(cls, v: int, info: Any) -> int:
+    def _validate_n_classes(cls, v: int, info: Any) -> int: # noqa: ANN401
         task = info.data.get("task", "regression")
         if task == "binary" and v != 2:
             return 2
@@ -133,7 +133,7 @@ class TrainerConfig(BaseModel):
     log_every_n_steps: int       = Field(10, ge=1)
     amp: bool           = False      # automatic mixed precision (GPU only)
     compile_model: bool = False      # torch.compile (PyTorch 2.x)
-    checkpoint_dir: Optional[str]    = None
+    checkpoint_dir: str | None    = None
 
     @field_validator("device")
     @classmethod
@@ -144,7 +144,7 @@ class TrainerConfig(BaseModel):
         return v
 
     @classmethod
-    def from_env(cls) -> "TrainerConfig":
+    def from_env(cls) -> TrainerConfig:
         """Load config from AXERA_TRAINER_* environment variables."""
         prefix = "AXERA_TRAINER_"
         data = {
@@ -155,7 +155,7 @@ class TrainerConfig(BaseModel):
         return cls(**data)
 
     @classmethod
-    def from_json(cls, path: Union[str, Path]) -> "TrainerConfig":
+    def from_json(cls, path: str | Path) -> TrainerConfig:
         """Load config from a JSON file."""
         with open(path) as f:
             return cls(**json.load(f))

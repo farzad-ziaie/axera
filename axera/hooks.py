@@ -18,7 +18,8 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ class HookRegistry:
 
     # ── Registration ──────────────────────────────────────────────────────────
 
-    def register(self, hook: str, fn: Optional[HookFn] = None):
+    def register(self, hook: str, fn: HookFn | None = None): # noqa: ANN201
         """
         Register a hook function.
 
@@ -95,7 +96,7 @@ class HookRegistry:
         except ValueError:
             logger.warning("Hook '%s' did not contain %s", hook, fn.__name__)
 
-    def clear(self, hook: Optional[str] = None) -> None:
+    def clear(self, hook: str | None = None) -> None:
         """Clear all hooks, or only those for a specific ``hook`` name."""
         if hook is None:
             self._hooks.clear()
@@ -144,7 +145,7 @@ class HookRegistry:
 _global_registry: HookRegistry = HookRegistry()
 
 
-def register(hook: str, fn: Optional[HookFn] = None):
+def register(hook: str, fn: HookFn | None = None): # noqa: ANN201
     """Register a hook in the global default registry."""
     return _global_registry.register(hook, fn)
 

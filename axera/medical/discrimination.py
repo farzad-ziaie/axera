@@ -13,13 +13,11 @@ Includes
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
 import numpy as np
 from numpy.typing import NDArray
 from scipy import stats
 from sklearn.metrics import roc_auc_score, roc_curve
-
 
 # ── DeLong AUC CI ─────────────────────────────────────────────────────────────
 
@@ -110,7 +108,7 @@ class OperatingPoint:
 def operating_point(
     y_true: NDArray,
     y_score: NDArray,
-    threshold: Optional[float] = None,
+    threshold: float | None = None,
     strategy: str = "youden",
 ) -> OperatingPoint:
     """
@@ -235,7 +233,7 @@ def reclassification(
     n = len(y_true)
     for _ in range(n_boot):
         idx = rng.integers(0, n, n)
-        yt, po, pn, ev = y_true[idx], p_old[idx], p_new[idx], events[idx]
+        _, po, pn, ev = y_true[idx], p_old[idx], p_new[idx], events[idx]
         b_ev  = _nri_ev(po, pn, ev)
         b_nev = _nri_nev(po, pn, ev)
         boot_nri.append(b_ev + b_nev)

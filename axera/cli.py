@@ -14,9 +14,7 @@ from __future__ import annotations
 
 import json
 import logging
-import sys
 from pathlib import Path
-from typing import Optional
 
 import numpy as np
 import typer
@@ -38,6 +36,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 def info() -> None:
     """Display Axera version and environment info."""
     import platform
+
     from axera._version import __version__
 
     table = Table(title="Axera Environment", show_header=False)
@@ -68,12 +67,12 @@ def train(
     data:    Path = typer.Option(..., "--data",    "-d", help="CSV file of features (X)"),
     target:  Path = typer.Option(..., "--target",  "-t", help="CSV file of targets (y)"),
     out_dir: Path = typer.Option(Path("./outputs"), "--out-dir", "-o"),
-    layers:  Optional[str] = typer.Option(None, "--layers", help="JSON layer spec"),
+    layers:  str | None = typer.Option(None, "--layers", help="JSON layer spec"),
 ) -> None:
     """Train an Axera model from the command line."""
     import pandas as pd
-    from axera.config import TrainerConfig, ModelConfig
-    from axera.layers import InputLayer, Dense, GMDH, RegressionHead
+
+    from axera.config import ModelConfig, TrainerConfig
     from axera.models import Sequential
     from axera.trainer import Trainer
 
@@ -149,17 +148,17 @@ def benchmark(
 ) -> None:
     """Benchmark inference latency and throughput."""
     import time
-    import torch
+
 
     console.print(f"[cyan]Benchmark: {n_runs} runs × {n_samples} samples × bs={batch_size}[/]")
     X_dummy = np.random.randn(n_samples, 8).astype(np.float64)
 
     # Memory baseline
-    try:
-        import psutil
-        mem_before = psutil.Process().memory_info().rss / 1e6
-    except ImportError:
-        mem_before = 0.0
+    # try:
+    #     import psutil
+    #     mem_before = psutil.Process().memory_info().rss / 1e6
+    # except ImportError:
+    #     mem_before = 0.0
 
     latencies = []
     for _ in range(n_runs):
@@ -190,7 +189,6 @@ def export(
     n_features: int  = typer.Option(..., "--n-features", "-n"),
 ) -> None:
     """Export model to ONNX or TorchScript."""
-    import torch
 
     console.print(f"Export to {fmt} — feature dim {n_features}")
     console.print("[yellow]Full export requires the Python API for architecture reconstruction.[/]")

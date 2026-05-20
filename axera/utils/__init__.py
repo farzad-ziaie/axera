@@ -8,20 +8,17 @@ causing NaN leakage into the imputed columns.
 
 from __future__ import annotations
 
-from typing import Optional, Union
-
 import numpy as np
 import pandas as pd
 from numpy.typing import NDArray
 from sklearn.impute import SimpleImputer
 
-
 # ── Imputation (bug-fixed) ────────────────────────────────────────────────────
 
 def impute_and_drop(
     df: pd.DataFrame,
-    impute_cols: Optional[list[str]] = None,
-    drop_cols: Optional[list[str]] = None,
+    impute_cols: list[str] | None = None,
+    drop_cols: list[str] | None = None,
     strategy: str = "mean",
 ) -> pd.DataFrame:
     """

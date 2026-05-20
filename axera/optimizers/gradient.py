@@ -9,20 +9,15 @@ Adam is re-implemented from scratch, correcting three bugs in the original:
 
 from __future__ import annotations
 
-import math
-from typing import Optional
-
 import numpy as np
 import torch
-import torch.nn as nn
 from torch.optim import Optimizer
-
 
 # ── Thin wrappers around torch.optim ─────────────────────────────────────────
 
 def get_optimizer(
     name: str,
-    params,
+    params, # noqa: ANN001
     lr: float = 1e-3,
     weight_decay: float = 0.0,
     **kwargs,
@@ -74,7 +69,7 @@ class Lion(Optimizer):
 
     def __init__(
         self,
-        params,
+        params, # noqa: ANN001
         lr: float = 1e-4,
         betas: tuple[float, float] = (0.9, 0.99),
         weight_decay: float = 0.0,
@@ -85,7 +80,7 @@ class Lion(Optimizer):
         super().__init__(params, defaults)
 
     @torch.no_grad()
-    def step(self, closure=None):  # type: ignore[override]
+    def step(self, closure=None) -> float | None:  # noqa: ANN001
         loss = None
         if closure is not None:
             with torch.enable_grad():
@@ -139,8 +134,8 @@ class NumpyAdam:
         self.eps    = eps
         self.wd     = weight_decay
         self.t      = 0
-        self.M: Optional[np.ndarray] = None   # first moment
-        self.V: Optional[np.ndarray] = None   # second moment
+        self.M: np.ndarray | None = None   # first moment
+        self.V: np.ndarray | None = None   # second moment
 
     def init(self, n_params: int) -> None:
         self.M = np.zeros(n_params)
@@ -149,13 +144,14 @@ class NumpyAdam:
 
     def step(self, grad: np.ndarray, weights: np.ndarray) -> np.ndarray:
         """Return updated weights given gradient ``grad``."""
-        assert self.M is not None and self.V is not None, "Call init() first."
+        if self.M is None or self.V is None:
+             raise ValueError("Call init() first to initialize optimizer state.")
         self.t += 1
         g = grad + self.wd * weights
-        self.M = self.beta1 * self.M + (1 - self.beta1) * g         # ← fixed
-        self.V = self.beta2 * self.V + (1 - self.beta2) * (g ** 2)  # ← fixed
-        m_hat = self.M / (1 - self.beta1 ** self.t)                 # ← fixed
-        v_hat = self.V / (1 - self.beta2 ** self.t)                 # ← fixed
+        self.M = self.beta1 * self.M + (1 - self.beta1) * g
+        self.V = self.beta2 * self.V + (1 - self.beta2) * (g ** 2)
+        m_hat = self.M / (1 - self.beta1 ** self.t)
+        v_hat = self.V / (1 - self.beta2 ** self.t)
         return weights - self.lr * m_hat / (np.sqrt(v_hat) + self.eps)
 
 

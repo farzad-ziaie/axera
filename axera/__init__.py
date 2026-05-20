@@ -17,13 +17,13 @@ from axera.config import (
     GMDHConfig,
     InferenceConfig,
     LIPConfig,
-    MOPSOConfig,
     ModelConfig,
+    MOPSOConfig,
     TrainerConfig,
 )
 from axera.hooks import HookRegistry, get_global_registry, register
 from axera.layers import GMDH, Dense, InputLayer
-from axera.losses import BlandAltmanLoss, LogCosh, MAE, MSE, MultiObjectiveLoss
+from axera.losses import MAE, MSE, BlandAltmanLoss, LogCosh, MultiObjectiveLoss
 from axera.medical import (
     bland_altman,
     brier_score,

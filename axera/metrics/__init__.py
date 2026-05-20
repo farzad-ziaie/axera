@@ -7,12 +7,11 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
     mean_absolute_error,
     mean_squared_error,
     r2_score,
-    roc_auc_score,
-    accuracy_score,
-    f1_score,
 )
 
 from axera.medical import bland_altman, concordance_correlation, icc, roc_auc
@@ -76,7 +75,7 @@ def evaluate_classification(
     y_score = np.asarray(y_score, dtype=float).ravel()
     y_pred  = (y_score >= 0.5).astype(int)
 
-    from axera.medical import operating_point, brier_score
+    from axera.medical import brier_score, operating_point
 
     op  = operating_point(y_true, y_score)
     bs  = brier_score(y_true, y_score)

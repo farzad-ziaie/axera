@@ -24,18 +24,20 @@ import contextlib
 import functools
 import logging
 import time
-from typing import Any, Callable, Generator, Optional
+from collections.abc import Callable, Generator
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 # ── Optional OTel import ──────────────────────────────────────────────────────
 
 try:
-    from opentelemetry import trace, metrics as otel_metrics
-    from opentelemetry.sdk.trace import TracerProvider
-    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+    from opentelemetry import metrics as otel_metrics
+    from opentelemetry import trace
     from opentelemetry.sdk.metrics import MeterProvider
     from opentelemetry.sdk.resources import Resource
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
     _OTEL_AVAILABLE = True
 except ImportError:
     _OTEL_AVAILABLE = False
@@ -47,7 +49,7 @@ _meter  = None
 
 def setup_telemetry(
     service_name: str = "axera",
-    endpoint: Optional[str] = None,
+    endpoint: str | None = None,
     insecure: bool = True,
 ) -> None:
     """
@@ -101,7 +103,7 @@ def setup_telemetry(
 @contextlib.contextmanager
 def trace_span(
     name: str,
-    attributes: Optional[dict[str, Any]] = None,
+    attributes: dict[str, Any] | None = None,
 ) -> Generator[Any, None, None]:
     """
     Context manager that wraps code in an OTel span.
@@ -119,7 +121,7 @@ def trace_span(
         yield span
 
 
-def instrument(name: Optional[str] = None):
+def instrument(name: str | None = None): # noqa: ANN201
     """
     Decorator that wraps a function in an OTel span.
 

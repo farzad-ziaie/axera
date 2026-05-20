@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal, Optional
+from typing import Literal
 
 import torch
 import torch.nn as nn
@@ -36,7 +36,7 @@ class InputLayer(nn.Module):
         self.register_buffer("min_", torch.zeros(in_features))
         self.register_buffer("max_", torch.ones(in_features))
 
-    def fit(self, x: torch.Tensor) -> "InputLayer":
+    def fit(self, x: torch.Tensor) -> InputLayer:
         """Compute normalization statistics from data."""
         with torch.no_grad():
             self.mean_.copy_(x.mean(0))

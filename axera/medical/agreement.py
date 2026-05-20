@@ -15,26 +15,24 @@ Includes
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal, Optional
+from typing import Literal
 
 import numpy as np
 from numpy.typing import NDArray
 from scipy import stats
-from scipy.optimize import curve_fit
 
-from axera.medical.icc import ICCType, icc
-
+from axera.medical.icc import icc
 
 # ── Bootstrap helpers ─────────────────────────────────────────────────────────
 
 def _bootstrap_ci(
     y: NDArray,
     y_hat: NDArray,
-    stat_fn,  # callable(y, y_hat) -> float
+    stat_fn,  # noqa: ANN001 # callable(y, y_hat) -> float
     n_boot: int = 2000,
     ci: float = 0.95,
     seed: int = 42,
-) -> tuple[float, float]:
+) -> tuple[float, float]: # noqa: ANN001
     """BCa bootstrap confidence interval for any scalar statistic."""
     rng = np.random.default_rng(seed)
     n = len(y)
@@ -209,7 +207,7 @@ class KappaResult:
 def cohen_kappa(
     y_true: NDArray,
     y_pred: NDArray,
-    weights: Optional[Literal["linear", "quadratic"]] = None,
+    weights: Literal["linear", "quadratic"] | None = None,
     ci: float = 0.95,
     n_boot: int = 2000,
 ) -> KappaResult:

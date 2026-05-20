@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional, Union
+from typing import Any
 
 import numpy as np
 import torch
@@ -10,7 +10,7 @@ import torch.nn as nn
 from numpy.typing import NDArray
 
 
-def _resolve_device(device: Optional[str] = None) -> torch.device:
+def _resolve_device(device: str | None = None) -> torch.device:
     """Auto-select best available device: CUDA → MPS → CPU."""
     if device is not None:
         return torch.device(device)
@@ -26,7 +26,7 @@ class TorchBackend:
 
     name = "torch"
 
-    def __init__(self, device: Optional[str] = None) -> None:
+    def __init__(self, device: str | None = None) -> None:
         self._device = _resolve_device(device)
 
     # ── Array creation ────────────────────────────────────────────────────────
@@ -77,10 +77,10 @@ class TorchBackend:
     def abs(self, x: torch.Tensor) -> torch.Tensor:
         return torch.abs(x)
 
-    def mean(self, x: torch.Tensor, axis: Optional[int] = None) -> torch.Tensor:
+    def mean(self, x: torch.Tensor, axis: int | None = None) -> torch.Tensor:
         return x.mean() if axis is None else x.mean(dim=axis)
 
-    def sum(self, x: torch.Tensor, axis: Optional[int] = None) -> torch.Tensor:
+    def sum(self, x: torch.Tensor, axis: int | None = None) -> torch.Tensor:
         return x.sum() if axis is None else x.sum(dim=axis)
 
     def sqrt(self, x: torch.Tensor) -> torch.Tensor:
@@ -97,7 +97,7 @@ class TorchBackend:
 
     # ── Device / dtype ────────────────────────────────────────────────────────
 
-    def to_numpy(self, x: Union[torch.Tensor, NDArray, Any]) -> NDArray:
+    def to_numpy(self, x: torch.Tensor | NDArray | Any) -> NDArray:
         if isinstance(x, torch.Tensor):
             return x.detach().cpu().numpy()
         return np.asarray(x)
@@ -112,7 +112,7 @@ class TorchBackend:
 
     # ── Grad ──────────────────────────────────────────────────────────────────
 
-    def no_grad(self):  # type: ignore[return]
+    def no_grad(self):  # noqa: ANN202
         return torch.no_grad()
 
     # ── Module base ───────────────────────────────────────────────────────────

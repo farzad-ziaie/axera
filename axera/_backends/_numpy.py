@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional, Union
+from typing import Any
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
@@ -59,10 +59,10 @@ class NumpyBackend:
     def abs(self, x: NDArray) -> NDArray:
         return np.abs(x)
 
-    def mean(self, x: NDArray, axis: Optional[int] = None) -> NDArray:
+    def mean(self, x: NDArray, axis: int | None = None) -> NDArray:
         return np.mean(x, axis=axis)
 
-    def sum(self, x: NDArray, axis: Optional[int] = None) -> NDArray:
+    def sum(self, x: NDArray, axis: int | None = None) -> NDArray:
         return np.sum(x, axis=axis)
 
     def sqrt(self, x: NDArray) -> NDArray:
@@ -79,7 +79,7 @@ class NumpyBackend:
 
     # ── Device / dtype ────────────────────────────────────────────────────────
 
-    def to_numpy(self, x: Union[NDArray, Any]) -> NDArray:
+    def to_numpy(self, x: NDArray | Any) -> NDArray:
         return np.asarray(x)
 
     def device(self) -> str:
@@ -90,7 +90,7 @@ class NumpyBackend:
 
     # ── Grad (no-op for numpy) ────────────────────────────────────────────────
 
-    def no_grad(self):  # type: ignore[return]
+    def no_grad(self):  # noqa: ANN202
         """Context manager (no-op for numpy backend)."""
         import contextlib
         return contextlib.nullcontext()
@@ -114,8 +114,8 @@ class _NumpyModule:
     def parameters(self) -> list[NDArray]:
         return []
 
-    def train(self, mode: bool = True) -> "_NumpyModule":
+    def train(self, mode: bool = True) -> _NumpyModule:
         return self
 
-    def eval(self) -> "_NumpyModule":
+    def eval(self) -> _NumpyModule:
         return self
