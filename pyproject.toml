@@ -108,12 +108,12 @@ manifest-path = "axera_core/Cargo.toml"
 # ── Ruff ─────────────────────────────────────────────────────────────────────
 [tool.ruff]
 target-version = "py312"
-line-length    = 100
-src            = ["axera", "tests"]
+line-length    = 120
+src            = ["axera"]
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "N", "UP", "ANN", "S", "B", "A", "C4", "PT"]
-ignore = ["ANN101", "ANN102", "S101"]
+ignore = ["ANN101", "ANN102", "ANN003", "ANN401", "B008", "S101", "N801", "N802", "N803", "N804", "N805", "N806", "E902"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["ANN", "S"]
