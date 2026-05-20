@@ -1,0 +1,79 @@
+site_name: Axera
+site_description: Polynomial neural networks for underdetermined biomedical datasets
+site_author: Farzad Ziaie Nezhad
+site_url: https://farzad-ziaie.github.io/axera
+repo_url: https://github.com/farzad-ziaie/axera
+repo_name: farzad-ziaie/axera
+copyright: "© 2025 Farzad Ziaie Nezhad — AGPLv3"
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_source: true
+            show_root_heading: true
+            show_root_full_path: false
+            members_order: source
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
+  - attr_list
+  - md_in_html
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Guide:
+    - Quick Start: guide/quickstart.md
+    - Architecture: guide/architecture.md
+    - Medical Metrics: guide/medical.md
+    - Optimizers: guide/optimizers.md
+    - CLI Reference: guide/cli.md
+  - API Reference:
+    - axera: api/axera.md
+    - axera.layers: api/layers.md
+    - axera.activations: api/activations.md
+    - axera.losses: api/losses.md
+    - axera.medical: api/medical.md
+    - axera.optimizers: api/optimizers.md
+    - axera.config: api/config.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
